@@ -23,29 +23,51 @@ type BooksState = {
 // TODO: Keep the returned state and reload shape compatible with Books.tsx.
 export function useBooks(): BooksState & { reload: () => void } {
 
-  const [loading, setLoading] = useState(true)
-const [books, setBooks] = useState<Book[]>([])
-const [error, setError] = useState(false)
 
+
+const [loading, setLoading] = useState(true)
+const [books, setBooks] = useState<Book[]>([])
+const [error, setError] = useState("")
+const [updatedAt, setUpdatedAt] = useState("")
+const [refresh, setRefresh] = useState(false)
 useEffect(()=>{
   
   const loadBooks =async()=> {
     const response = await fetch('/api/books')
      if (!response.ok){
-    setError(true)
+    setError("error")
+
     return; 
   };
   const data = await response.json()
   const parsed = parseBooksPayload(data);
 
 if(!parsed){
-  setError(true)
+  setError("")
   return;
 }
   setBooks(parsed.books)
+  setLoading(false)
+  setUpdatedAt(parsed.updatedAt)
 
   }
  void loadBooks()
 
-}, [])
+}, [refresh])
+const reload = () => {
+   setRefresh(!refresh)
+
+};
+
+return {
+  status: loading ? 'loading' : error ? 'error' : 'success',
+  books,
+  error: error ? 'Could not load books.' : null,
+  updatedAt,
+  reload,
+};
+
 }
+
+
+
