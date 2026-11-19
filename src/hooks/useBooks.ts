@@ -29,11 +29,16 @@ const [loading, setLoading] = useState(true)
 const [books, setBooks] = useState<Book[]>([])
 const [error, setError] = useState("")
 const [updatedAt, setUpdatedAt] = useState("")
-const [refresh, setRefresh] = useState(false)
+const [refreshToken, setRefreshToken] = useState(0);
+
 useEffect(()=>{
+  const endpoint = refreshToken === 0? '/api/books' :  `/api/books?refresh=${refreshToken}`;
   
   const loadBooks =async()=> {
-    const response = await fetch('/api/books')
+    const response = await fetch(endpoint,{
+      headers: {Accept: 'application/json'},
+      cache: 'no-store'
+    })
      if (!response.ok){
     setError("error")
 
@@ -53,9 +58,10 @@ if(!parsed){
   }
  void loadBooks()
 
-}, [refresh])
+}, [refreshToken])
 const reload = () => {
-   setRefresh(!refresh)
+     setRefreshToken((token) => token + 1);
+
 
 };
 
