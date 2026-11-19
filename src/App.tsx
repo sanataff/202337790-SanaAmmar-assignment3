@@ -1,5 +1,6 @@
 import About from './components/About';
 import BackToTop from './components/BackToTop';
+import Books from './components/Books';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -19,6 +20,7 @@ export default function App() {
       <main id="main-content">
         <About />
         <Projects />
+        <Books />
         <Stack />
         <Contact />
       </main>

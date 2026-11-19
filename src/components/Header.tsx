@@ -7,6 +7,7 @@ import MaskedText from './MaskedText';
 const sections = [
   { id: 'about', label: 'About' },
   { id: 'projects', label: 'Work' },
+  { id: 'reading', label: 'Reading' },
   { id: 'stack', label: 'Toolkit' },
   { id: 'contact', label: 'Contact' },
 ];
