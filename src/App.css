@@ -378,29 +378,228 @@
   font-size: 12px;
 }
 
-.audience-placeholder {
-  max-width: 60ch;
-  padding: 18px 20px;
-  border: 1px dashed var(--border-strong);
-  color: var(--muted);
+.research__grid {
+  display: flex;
+  justify-content: space-between;
+  max-width: 900px;
+  margin-inline: auto;
+  align-items: start;
+  gap: clamp(24px, 5vw, 64px);
 }
 
-.cv-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 42px;
-  padding: 8px 14px;
-  border: 1px solid var(--ink);
+.research-poster {
+  width: 44%;
+  min-width: 0;
+}
+
+.research-poster__preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: clamp(190px, 23vw, 270px);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.research-poster__preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.research-poster__preview:hover img {
+  transform: scale(1.025);
+}
+
+.research-poster__open {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 5px 9px;
+  background: var(--bg);
   color: var(--ink);
-  font-size: 14px;
-  transition:
-    background-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
+  font-family: var(--mono);
+  font-size: 11px;
 }
 
-.cv-link:hover {
-  background: var(--ink);
-  color: var(--on-ink);
+.research-poster__details {
+  padding-top: 17px;
+}
+
+.research-poster__eyebrow {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.research-poster__details h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  line-height: 1.2;
+}
+
+.research-poster__description {
+  max-width: 58ch;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.experience__subhead {
+  margin-bottom: 26px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.experience-timeline-wrap {
+  position: relative;
+}
+
+.experience-timeline__path {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  overflow: visible;
+}
+
+.experience-timeline__thread-bed {
+  fill: none;
+  stroke: #e9d5ff;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.experience-timeline__thread {
+  fill: none;
+  stroke: #8b5cf6;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: url(#experience-thread-wobble);
+  vector-effect: non-scaling-stroke;
+}
+
+.experience-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+}
+
+.experience-timeline__item {
+  position: relative;
+  min-width: 0;
+  padding-top: 78px;
+}
+
+.experience-timeline__node {
+  position: absolute;
+  top: 8px;
+  left: calc(50% - 11px);
+  width: 22px;
+  height: 22px;
+  border: 1px solid #8b5cf6;
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.experience-timeline__node[data-position='1'] {
+  top: 48px;
+}
+
+.experience-timeline__node::after {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #8b5cf6;
+  content: '';
+}
+
+.experience-timeline__period {
+  margin-bottom: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.experience-timeline__item h4 {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.experience-timeline__organization {
+  margin-top: 9px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.experience-timeline__summary {
+  max-width: 30ch;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.experience-impact {
+  margin-top: clamp(48px, 7vw, 82px);
+}
+
+.experience-impact__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.experience-impact__item {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: 19px 16px 21px 0;
+}
+
+.experience-impact__item + .experience-impact__item {
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
+}
+
+.experience-impact__item strong {
+  font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+  letter-spacing: -0.04em;
+}
+
+.experience-impact__item span {
+  max-width: 24ch;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.experience__education {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.experience__education span {
+  font-family: var(--mono);
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 /* --- Section scaffolding ---------------------------------------------- */
@@ -1017,6 +1216,52 @@
 }
 
 @media (max-width: 860px) {
+  .experience-timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 38px;
+    padding-left: 29px;
+  }
+
+  .experience-timeline__path {
+    display: none;
+  }
+
+  .experience-timeline-wrap::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 9px;
+    width: 1px;
+    background: var(--border-strong);
+    content: '';
+  }
+
+  .experience-timeline__item {
+    padding-top: 0;
+  }
+
+  .experience-timeline__node {
+    top: 0;
+    left: -29px;
+  }
+
+  .experience-timeline__node[data-position='1'] {
+    top: 0;
+  }
+
+  .experience-impact__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .experience-impact__item:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .experience-impact__item:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+
   .hero {
     grid-template-columns: minmax(0, 1fr);
     gap: 40px;
@@ -1072,6 +1317,46 @@
 
   .nav-links {
     gap: 14px;
+  }
+
+  .experience-timeline {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-left: 29px;
+  }
+
+  .experience-timeline__node {
+    top: 0;
+  }
+
+  .experience-timeline-wrap::before {
+    display: block;
+  }
+
+  .experience-impact__item {
+    padding-right: 10px;
+  }
+
+  .experience-impact__item + .experience-impact__item {
+    padding-left: 10px;
+  }
+
+  .experience__education {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .research__grid {
+    flex-direction: column;
+    max-width: 560px;
+  }
+
+  .research-poster {
+    width: 100%;
+  }
+
+  .research-poster__preview {
+    height: clamp(220px, 58vw, 320px);
   }
 
   .theme-switch__label {
