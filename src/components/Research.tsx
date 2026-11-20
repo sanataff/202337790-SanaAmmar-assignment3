@@ -7,7 +7,11 @@ const posters = [
     title: 'Faithful Black-Box Spatial Interpretability for Vision Language Models',
     description:
       'AnswerMap builds spatial explanations from model outputs without access to internal weights, then tests whether those maps faithfully track the model’s answers.',
-    preview: '/kaustposter-preview.webp',
+    avif:
+      '/kaustposter-preview-480.avif 480w, /kaustposter-preview.avif 960w',
+    preview: '/kaustposter-preview-480.webp',
+    webp:
+      '/kaustposter-preview-480.webp 480w, /kaustposter-preview.webp 960w',
     original: '/kaustposter.png',
     width: 4678,
     height: 3307,
@@ -19,7 +23,11 @@ const posters = [
     title: 'Explainable AI for Medical Image Segmentation',
     description:
       'A comparison of post-hoc explainability methods for MedSAM segmentation, exploring how the choice of technique affects medical-image explanations.',
-    preview: '/wids-2025-poster-preview.webp',
+    avif:
+      '/wids-2025-poster-preview-480.avif 480w, /wids-2025-poster-preview.avif 960w',
+    preview: '/wids-2025-poster-preview-480.webp',
+    webp:
+      '/wids-2025-poster-preview-480.webp 480w, /wids-2025-poster-preview.webp 960w',
     original: '/WiDs%202025%20Poster.png',
     width: 2245,
     height: 3179,
@@ -47,14 +55,23 @@ export default function Research() {
               rel="noopener noreferrer"
               aria-label={`Open full-size poster: ${poster.title}`}
             >
-              <img
-                src={poster.preview}
-                alt={poster.alt}
-                width={poster.width}
-                height={poster.height}
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source
+                  srcSet={poster.avif}
+                  sizes="(max-width: 680px) calc(100vw - 32px), 40vw"
+                  type="image/avif"
+                />
+                <img
+                  src={poster.preview}
+                  srcSet={poster.webp}
+                  sizes="(max-width: 680px) calc(100vw - 32px), 40vw"
+                  alt={poster.alt}
+                  width={poster.width}
+                  height={poster.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <span className="research-poster__open">View full poster ↗</span>
             </a>
             <div className="research-poster__details">
