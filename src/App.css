@@ -10,13 +10,6 @@
   padding-bottom: 48px;
 }
 
-.serif {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--accent);
-}
-
 /* --- drawably accents --------------------------------------------------- */
 /* Solid buttons paint with the accent token (which follows the ink). */
 .drawably-button--solid {
@@ -55,10 +48,6 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--ink);
-}
-
-.topbar__name .serif {
-  margin-right: 1px;
 }
 
 .nav-links {
@@ -261,50 +250,6 @@
 }
 
 /* The receptionist gives a small nod and bounce for each new visitor type. */
-.welcome-desk__person {
-  transform-box: fill-box;
-  transform-origin: center bottom;
-  animation: desk-greet-bob 900ms var(--ease-out) both;
-}
-
-.welcome-desk__head {
-  transform-box: fill-box;
-  transform-origin: center bottom;
-  animation: desk-greet-nod 900ms var(--ease-out) both;
-}
-
-@keyframes desk-greet-bob {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  30% {
-    transform: translateY(-4px) rotate(-1.4deg);
-  }
-  60% {
-    transform: translateY(-1px) rotate(0.35deg);
-  }
-  82% {
-    transform: translateY(-2.5px) rotate(-0.8deg);
-  }
-}
-
-@keyframes desk-greet-nod {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-7deg);
-  }
-  55% {
-    transform: rotate(3deg);
-  }
-  78% {
-    transform: rotate(-2deg);
-  }
-}
-
 /* The page lifts, narrows toward the spine, and fades to reveal the signature. */
 .welcome-desk__page {
   opacity: 0;
@@ -413,12 +358,6 @@
   font-weight: 600;
 }
 
-.audience-switcher__choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
 .achoice {
   color: var(--muted);
 }
@@ -490,14 +429,6 @@
   color: var(--muted);
 }
 
-.section__meta--link {
-  transition: color var(--dur-fast) var(--ease);
-}
-
-.section__meta--link:hover {
-  color: var(--accent);
-}
-
 /* --- About ------------------------------------------------------------- */
 .about__body {
   max-width: 48em;
@@ -514,34 +445,6 @@
   margin-top: 32px;
   font-size: clamp(1.05rem, 1.7vw, 1.35rem);
   line-height: 1.55;
-  color: var(--muted);
-}
-
-.stats {
-  margin-top: 52px;
-}
-
-.stats__divider {
-  margin: 0 0 26px;
-}
-
-.stats__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 44px;
-}
-
-.stats__value {
-  display: block;
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  color: var(--accent);
-}
-
-.stats__label {
-  font-family: var(--mono);
-  font-size: 12px;
   color: var(--muted);
 }
 
@@ -867,46 +770,26 @@
   }
 }
 
-/* --- Cards, empty state & notices ------------------------------------- */
+/* --- Empty state ------------------------------------------------------- */
 .empty {
   padding: 34px;
   text-align: center;
   animation: fade-in var(--dur) var(--ease-out) both;
 }
 
-.notice {
-  display: grid;
-  gap: 6px;
-  padding: 24px;
-  animation: fade-in var(--dur) var(--ease-out) both;
-}
-
-.empty__title,
-.notice__title {
+.empty__title {
   font-weight: 600;
   color: var(--ink);
 }
 
-.empty__body,
-.notice__body {
+.empty__body {
   font-size: 14px;
   color: var(--muted);
 }
 
-.empty .drawably-button,
-.notice .drawably-button {
+.empty .drawably-button {
   margin-top: 14px;
   width: fit-content;
-}
-
-.notice--error .notice__title {
-  color: var(--danger);
-}
-
-.notice__tag {
-  margin-right: 8px;
-  font-size: 11px;
-  vertical-align: middle;
 }
 
 @keyframes fade-in {
@@ -1209,10 +1092,6 @@
 
   .book-row__aside {
     justify-content: flex-start;
-  }
-
-  .stats__list {
-    gap: 28px;
   }
 
   .back-to-top {

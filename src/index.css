@@ -39,7 +39,6 @@
   --dur-reveal: 800ms;
 
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* Map drawably's pen colours onto the tokens so every sketch re-themes. */
@@ -245,25 +244,7 @@ select:focus-visible {
   }
 }
 
-/* Skeleton placeholder — a solid pulsing block (no gradient). */
-.skeleton {
-  background: var(--surface);
-  animation: skeleton-pulse 1.4s var(--ease-in-out) infinite;
-}
-
-@keyframes skeleton-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.45;
-  }
-}
-
-/* ==========================================================================
-   Reduced motion — disable everything, show content immediately.
-   ========================================================================== */
+/* Reduced motion: disable animations and show content immediately. */
 
 @media (prefers-reduced-motion: reduce) {
   html {
