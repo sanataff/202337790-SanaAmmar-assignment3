@@ -20,7 +20,11 @@ import MaskedText from './MaskedText';
 
 type CategoryFilter = 'All' | ProjectCategory;
 
-export default function Projects() {
+type ProjectsProps = {
+  title?: string;
+};
+
+export default function Projects({ title = 'Selected work' }: ProjectsProps) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<CategoryFilter>('All');
   const [sort, setSort] = useState<SortOption>('featured');
@@ -75,7 +79,7 @@ export default function Projects() {
     <section id="projects" className="section">
       <div className="section__head">
         <h2 className="section__title">
-          <MaskedText>Selected work</MaskedText>
+          <MaskedText>{title}</MaskedText>
         </h2>
         <DrawablyBadge className="section__meta" aria-live="polite">
           {visibleProjects.length} of {projects.length} projects
