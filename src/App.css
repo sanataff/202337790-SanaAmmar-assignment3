@@ -717,6 +717,12 @@
   color: var(--faint);
 }
 
+.books__expand {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .books__state {
   margin-top: 6px;
 }

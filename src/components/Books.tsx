@@ -13,6 +13,8 @@ import Reveal from './Reveal';
 
 type BookFilter = 'all' | BookStatus;
 
+const BOOKS_PREVIEW_COUNT = 4;
+
 const FILTERS: Array<{ value: BookFilter; label: string }> = [
   { value: 'all', label: 'All' },
   { value: 'reading', label: 'Reading' },
@@ -89,6 +91,7 @@ function BooksSkeleton() {
 export default function Books() {
   const { status, books, error, reload } = useBooks();
   const [filter, setFilter] = useState<BookFilter>('all');
+  const [showAllBooks, setShowAllBooks] = useState(false);
 
   const counts = useMemo(() => {
     const next: Record<BookStatus, number> = {
@@ -106,6 +109,9 @@ export default function Books() {
     () => (filter === 'all' ? books : books.filter((book) => book.status === filter)),
     [books, filter],
   );
+  const displayedBooks = showAllBooks
+    ? visibleBooks
+    : visibleBooks.slice(0, BOOKS_PREVIEW_COUNT);
 
   const activeFilter = FILTERS.findIndex((item) => item.value === filter);
   const hasBooks = books.length > 0;
@@ -147,7 +153,10 @@ export default function Books() {
                 type="button"
                 role="tab"
                 className="tab"
-                onClick={() => setFilter(item.value)}
+                onClick={() => {
+                  setFilter(item.value);
+                  setShowAllBooks(false);
+                }}
               >
                 {item.label}
                 {item.value !== 'all' && counts[item.value] > 0 && (
@@ -200,10 +209,22 @@ export default function Books() {
 
       {hasBooks && visibleBooks.length > 0 && (
         <DrawablyList className="book-list" marker="dash" key={filter}>
-          {visibleBooks.map((book) => (
+          {displayedBooks.map((book) => (
             <BookRow key={book.id} book={book} />
           ))}
         </DrawablyList>
+      )}
+
+      {visibleBooks.length > BOOKS_PREVIEW_COUNT && (
+        <div className="books__expand">
+          <DrawablyButton
+            type="button"
+            aria-expanded={showAllBooks}
+            onClick={() => setShowAllBooks((expanded) => !expanded)}
+          >
+            {showAllBooks ? 'Show fewer books' : `Show all ${visibleBooks.length} books`}
+          </DrawablyButton>
+        </div>
       )}
     </section>
   );
