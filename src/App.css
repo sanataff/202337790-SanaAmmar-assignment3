@@ -97,10 +97,15 @@
 /* --- Hero -------------------------------------------------------------- */
 .hero {
   min-height: 78svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-block: clamp(72px, 14vh, 150px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+  padding-block: clamp(56px, 10vh, 120px);
+}
+
+.hero__copy {
+  min-width: 0;
 }
 
 .hero__eyebrow {
@@ -115,7 +120,7 @@
 }
 
 .hero__title {
-  font-size: clamp(2.6rem, 9.4vw, 7rem);
+  font-size: clamp(2.6rem, 6.2vw, 5.8rem);
   line-height: 0.98;
   letter-spacing: -0.045em;
   font-weight: 500;
@@ -135,6 +140,328 @@
   align-items: center;
   gap: 18px;
   margin-top: 34px;
+}
+
+/* --- Welcome desk ------------------------------------------------------ */
+/* A sketched reception scene in the hero's right column. */
+.welcome {
+  display: grid;
+  gap: 20px;
+  align-content: center;
+  width: 100%;
+}
+
+.welcome-desk {
+  display: block;
+  width: 100%;
+  max-width: 470px;
+  height: auto;
+  transform-origin: center;
+  animation: desk-float 7s var(--ease-in-out) infinite;
+
+  /* Black, white and violet. The drawing sits straight on the page; in dark
+     mode only the free-standing strokes flip to white. */
+  --desk-paper: #ffffff;
+  --desk-surface: #ece5fb;
+  --desk-ink: #0b0b0b;
+  --desk-limb: #0b0b0b;
+  --desk-hair: #0b0b0b;
+  --desk-highlight: #ffffff;
+  --desk-accent: #5b21b6;
+}
+
+:root[data-theme="dark"] .welcome-desk {
+  --desk-limb: #f3efff;
+  --desk-hair: #8b5cf6;
+  --desk-accent: #8b5cf6;
+}
+
+.welcome-desk__limb {
+  stroke: var(--desk-limb);
+}
+
+@keyframes desk-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  35% {
+    transform: translateY(-5px) rotate(-0.35deg);
+  }
+  70% {
+    transform: translateY(-2px) rotate(0.3deg);
+  }
+}
+
+/* The bell and its ring marks re-mount whenever the visitor type changes. */
+.welcome-desk__bell {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: desk-bell-ring 780ms var(--ease-out) both;
+}
+
+.welcome-desk__ding {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: desk-ding 780ms var(--ease-out) both;
+  stroke: var(--desk-limb);
+}
+
+@keyframes desk-bell-ring {
+  0%,
+  18% {
+    transform: rotate(0deg);
+  }
+  34% {
+    transform: rotate(-7deg);
+  }
+  52% {
+    transform: rotate(6deg);
+  }
+  68% {
+    transform: rotate(-3.5deg);
+  }
+  84% {
+    transform: rotate(1.5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes desk-ding {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.92);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+/* the visitor badge hangs off the desk and sways a little */
+.welcome-desk__badge {
+  transform-box: fill-box;
+  transform-origin: center top;
+  animation: desk-badge-sway 7s var(--ease-in-out) infinite;
+}
+
+@keyframes desk-badge-sway {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+
+/* The receptionist gives a small nod and bounce for each new visitor type. */
+.welcome-desk__person {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: desk-greet-bob 900ms var(--ease-out) both;
+}
+
+.welcome-desk__head {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: desk-greet-nod 900ms var(--ease-out) both;
+}
+
+@keyframes desk-greet-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-4px) rotate(-1.4deg);
+  }
+  60% {
+    transform: translateY(-1px) rotate(0.35deg);
+  }
+  82% {
+    transform: translateY(-2.5px) rotate(-0.8deg);
+  }
+}
+
+@keyframes desk-greet-nod {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-7deg);
+  }
+  55% {
+    transform: rotate(3deg);
+  }
+  78% {
+    transform: rotate(-2deg);
+  }
+}
+
+/* The page lifts, narrows toward the spine, and fades to reveal the signature. */
+.welcome-desk__page {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: desk-page-turn 1100ms var(--ease-in-out) both;
+}
+
+@keyframes desk-page-turn {
+  0%,
+  12% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) skewY(0deg) scaleX(1);
+  }
+  32% {
+    opacity: 1;
+    transform: translateY(-3px) rotate(-1.5deg) skewY(-1deg) scaleX(0.94);
+  }
+  56% {
+    opacity: 1;
+    transform: translateY(-7px) rotate(-4deg) skewY(-3deg) scaleX(0.62);
+  }
+  76% {
+    opacity: 0.9;
+    transform: translateY(-5px) rotate(-5deg) skewY(-3deg) scaleX(0.3);
+  }
+  90% {
+    opacity: 0.5;
+    transform: translateY(-2px) rotate(-2deg) skewY(-1deg) scaleX(0.06);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg) skewY(0deg) scaleX(0.02);
+  }
+}
+
+/* The resting arm gives way to a reaching arm while the page turns. */
+.welcome-desk__arm-rest {
+  animation: desk-arm-rest 1100ms var(--ease-in-out) both;
+}
+
+@keyframes desk-arm-rest {
+  0%,
+  14% {
+    opacity: 1;
+  }
+  24%,
+  82% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.welcome-desk__reach {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: right top;
+  animation: desk-reach 1100ms var(--ease-in-out) both;
+}
+
+@keyframes desk-reach {
+  0%,
+  10% {
+    opacity: 0;
+    transform: rotate(-23deg);
+  }
+  20% {
+    opacity: 1;
+    transform: rotate(-10deg);
+  }
+  34% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  52% {
+    opacity: 1;
+    transform: rotate(6deg);
+  }
+  70% {
+    opacity: 1;
+    transform: rotate(12deg);
+  }
+  86% {
+    opacity: 0.4;
+    transform: rotate(10deg);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(4deg);
+  }
+}
+
+.audience-switcher {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+}
+
+.audience-switcher legend {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.audience-switcher__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.achoice {
+  color: var(--muted);
+}
+
+.drawably-button.achoice:hover:not(:disabled) .drawably-outline,
+.drawably-button.achoice[aria-pressed="true"] .drawably-outline {
+  fill: transparent;
+  stroke: #8B5CF6;
+}
+
+.achoice[aria-pressed="true"] {
+  color: var(--ink);
+}
+
+.audience-switcher__note {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.audience-placeholder {
+  max-width: 60ch;
+  padding: 18px 20px;
+  border: 1px dashed var(--border-strong);
+  color: var(--muted);
+}
+
+.cv-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 8px 14px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  font-size: 14px;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.cv-link:hover {
+  background: var(--ink);
+  color: var(--on-ink);
 }
 
 /* --- Section scaffolding ---------------------------------------------- */
@@ -801,6 +1128,17 @@
 }
 
 @media (max-width: 860px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    padding-block: clamp(48px, 8vh, 90px);
+  }
+
+  /* the drawing follows the hero copy once the two columns collapse */
+  .welcome {
+    max-width: 480px;
+  }
+
   .work-row__tags {
     display: none;
   }
@@ -826,6 +1164,21 @@
 @media (max-width: 680px) {
   .portfolio {
     width: min(100% - 32px, 1120px);
+  }
+
+  /* stack the choices above the drawing on phones, so the switcher stays
+     within reach before the illustration */
+  .welcome {
+    gap: 18px;
+    width: 100%;
+  }
+
+  .welcome .audience-switcher {
+    order: -1;
+  }
+
+  .welcome-desk {
+    width: min(100%, 320px);
   }
 
   .nav-links {
