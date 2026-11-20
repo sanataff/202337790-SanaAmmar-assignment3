@@ -1,6 +1,6 @@
 # Technical Documentation
 
-Portfolio website — SWE363 Assignment 2 (Interactive Features)
+Portfolio website — SWE363 Assignment 3 (Advanced Functionality)
 **Author:** Sana Ammar · **Student ID:** 202337790
 
 ---
@@ -9,9 +9,10 @@ Portfolio website — SWE363 Assignment 2 (Interactive Features)
 
 An interactive personal portfolio built as a **React + Vite + TypeScript**
 single-page application. It presents a hero, an about section, a filterable
-project catalogue, a toolkit tab switcher and a validated contact form, styled
-as a light, editorial, typography-driven layout with a considered motion system
-and **hand-drawn controls** from the drawably library.
+project catalogue, a live Notion reading shelf, a toolkit tab switcher and a
+validated contact form, styled as a light, editorial, typography-driven layout
+with a considered motion system and **hand-drawn controls** from the drawably
+library. The Notion token stays server-side in a Netlify Function.
 
 **Two hard design constraints:** the interface uses **no gradients and no
 shadows** — depth comes from the sketched controls, thin rules, spacing and hover
@@ -26,19 +27,22 @@ tints.
 | Language | TypeScript | Catches mistakes (wrong prop / field names) at build time |
 | Styling | Plain CSS + custom properties | Small surface, easy theming, no shadows/gradients |
 | Components | [drawably](https://www.drawably.dev/) v0.4.2 | Hand-drawn (sketched) buttons, inputs, tabs, cards, alerts, badges, dividers and lists |
+| Reading list | Notion API + Netlify Functions | Keeps the Notion token server-side and turns a private book database into a read-only shelf |
 
 
-The only runtime dependency beyond React and React DOM is drawably, which is
-zero-dependency itself.
+The browser bundle has no additional runtime dependencies beyond React, React
+DOM, and drawably, which is zero-dependency itself. `@notionhq/client` is used
+only by the Netlify Function and never shipped to the client.
 
 ## 3. Project Structure
 
 ```text
-202337790-SanaAmmar-assignment2/
+202337790-SanaAmmar-assignment3/
 ├── index.html                     Vite HTML entry
 ├── package.json                   Dependencies and npm scripts
 ├── package-lock.json              Locked dependency versions
-├── vite.config.ts                 Vite configuration
+├── vite.config.ts                 Vite configuration + dev books middleware
+├── netlify/functions/books.mjs    Notion reading-list function (/api/books)
 ├── eslint.config.js               ESLint configuration
 ├── tsconfig.json                  Shared TypeScript configuration
 ├── tsconfig.app.json              Application TypeScript configuration
@@ -50,18 +54,25 @@ zero-dependency itself.
 │   ├── index.css                  Design tokens, animation primitives, layout rules
 │   ├── App.css                    Component styles
 │   ├── data/
-│   │   └── projects.ts            Project catalogue + types
+│   │   ├── projects.ts            Project catalogue + types
+│   │   └── visitorTypes.ts        Audience options + homepage section order
 │   ├── lib/
-│   │   └── scroll.ts              Smooth scrolling (reduced-motion aware)
+│   │   ├── books.ts                Book types + runtime validation of API data
+│   │   └── scroll.ts               Smooth scrolling (reduced-motion aware)
 │   ├── hooks/
-│   │   ├── useLocalStorage.ts      Persistence with safe error handling
-│   │   ├── useTheme.ts             Light/dark theme + data-theme attribute
-│   │   ├── useRevealOnScroll.ts    IntersectionObserver reveal
+│   │   ├── useBooks.ts             Reading-list fetch, loading, error and retry
+│   │   ├── useLocalStorage.ts       Persistence with safe error handling
+│   │   ├── useTheme.ts              Light/dark theme + data-theme attribute
+│   │   ├── useRevealOnScroll.ts     IntersectionObserver reveal
 │   │   └── usePrefersReducedMotion.ts Tracks the reduced-motion setting
 │   └── components/
-│       ├── Header.tsx             Nav, greeting, theme toggle, hero
+│       ├── Header.tsx             Nav, greeting, theme toggle, hero + audience switcher
+│       ├── AudienceSwitcher.tsx   Persisted audience selection controls
 │       ├── About.tsx              Bio + scroll-linked word reveal
 │       ├── Projects.tsx           Search / filter / sort / expand + empty state
+│       ├── Experience.tsx         Compact experience timeline + impact highlights
+│       ├── Research.tsx           Responsive research poster gallery
+│       ├── Books.tsx              Notion reading shelf + status filter + compact preview
 │       ├── Stack.tsx              drawably tab switcher + toolkit list
 │       ├── Contact.tsx            Validated form + animated confirmation
 │       ├── Footer.tsx             Giant slide-up name + meta bar
@@ -70,10 +81,11 @@ zero-dependency itself.
 │       ├── Reveal.tsx             Fade / rise / blur-in wrapper
 │       └── WordsReveal.tsx        Scroll-linked word-by-word paragraph
 ├── public/
-│   └── favicon.svg
+│   └── favicon.svg, poster originals + AVIF/WebP previews
 ├── docs/
 │   ├── ai-usage-report.md
-│   └── technical-documentation.md
+│   ├── technical-documentation.md
+│   └── spec-assignment-3.md
 └── README.md
 ```
 
@@ -81,11 +93,12 @@ zero-dependency itself.
 
 | Assignment requirement | Where it is implemented |
 | ---------------------- | ----------------------- |
-| **Dynamic content** | `Projects.tsx` (live search, category filter, sort, expand), `Stack.tsx` (tabs), `Header.tsx` (time-based greeting, theme toggle) |
-| **Data handling** | `localStorage` for the theme (`useLocalStorage`) and a validated form (`Contact.tsx`) |
+| **External API / live data** | `netlify/functions/books.mjs` + `useBooks.ts` + `Books.tsx` — the Notion Book List is fetched server-side and rendered as a filterable reading shelf with a four-book preview |
+| **Dynamic content** | `Projects.tsx` (live search, category filter, sort, expand), `Books.tsx` (status filter and expandable four-book preview), `Stack.tsx` (tabs), `Header.tsx` (time-based greeting, theme toggle) |
+| **Visitor personalization** | `AudienceSwitcher.tsx` saves the visitor type in `localStorage`; `App.tsx` reorders sections using `visitorTypes.ts` |
+| **Data handling** | `localStorage` for theme and visitor type (`useLocalStorage`), server-side Notion reads, and API-response validation in `src/lib/books.ts`; validated form (`Contact.tsx`) |
 | **Animation / transitions** | Masked line reveals, blur-in scroll reveals, scroll-linked word reveal, staggered rows, hover motion, drawably's boiling sketches, footer name reveal, floating button — all reduced-motion aware |
-| **Error handling / feedback** | Field-level form errors, an animated form confirmation, and an empty state ("No projects found") |
-| **A hand-drawn figure** (portfolio craft) | `hairline/table.js` — a Hairline *table for two* in the contact section; the chair under the pointer draws up to the table and the read-out names it, framed by `TableFigure.tsx` |
+| **Error handling / feedback** | Field-level form errors, an animated form confirmation, empty project/book states, and a reading-list error card with retry |
 
 
 ## 5. Data Handling Details
@@ -97,12 +110,81 @@ private-browsing or a disabled store degrades gracefully. The theme uses the key
 first paint to avoid a flash of the wrong colours; the first visit follows the
 system preference.
 
+The audience switcher stores one of `recruiter`, `researcher`, `student`, or
+`browsing` under `portfolio-audience`. `App.tsx` uses that preference to reorder
+the homepage sections. The Experience section presents CV-based research,
+education and product-design work in a responsive timeline, followed by
+selected impact highlights. The CV action links to the supplied Google Drive
+document.
+
 
 ### Form validation (`Contact.tsx`)
 - Rules: name ≥ 2 chars; email matches an `@` + domain pattern; message ≥ 10
   chars. `noValidate` lets the custom logic own the messaging.
 - Errors appear beside the field, are announced (`role="alert"`), and clear as
   the user types. A simulated send shows a spinner then a success message.
+
+### Notion reading list (`netlify/functions/books.mjs`, `useBooks.ts`, `Books.tsx`)
+
+The reading shelf is a **server-side** integration. The browser never sees the
+Notion token or the raw database payload.
+
+**Request flow**
+
+```text
+Browser → GET /api/books
+        → Netlify Function (production) or Vite dev middleware
+        → Notion SDK → Book List data source
+        → normalise → { books, count, updatedAt }
+        → useBooks validates the JSON → Books.tsx renders
+```
+
+**Configuration**
+
+| Variable | Purpose |
+| -------- | ------- |
+| `NOTION_TOKEN` | Internal integration token; required and secret |
+| `NOTION_DB_ID` | Database ID from the Notion URL; resolved to its data source |
+| `NOTION_DATA_SOURCE_ID` | Optional direct data-source ID when a database has multiple sources |
+
+The integration must be connected to the database in Notion (⋯ → Connections),
+otherwise the Notion API returns `object_not_found`.
+
+**Property mapping**
+
+| Notion property | Output |
+| --------------- | ------ |
+| `Title` (title) | `title` |
+| `Author` (rich text) | `author` or `null` |
+| `Non/Fiction` (select) | `category` or `null` |
+| `Status` (select) | `status`: `finished`, `reading`, `want`, or `unknown` |
+| `Rating` (select) | `rating`: 1–5 or `null` |
+| `Date` (date) | `date` ISO string or `null` |
+
+Status emoji are stripped and normalised (`🎉 Done` → `finished`, `⏳ Doing` →
+`reading`, `🚨 To Do` → `want`). Empty-title rows are ignored. Rows are sorted
+reading → finished → want, then by rating, then title. `Notes` and `Quotes` are
+deliberately **not** returned.
+
+**Netlify Function**
+
+- ESM function using `@notionhq/client` v5 (CommonJS interop via a default
+  import).
+- Accepts `NOTION_DB_ID` or a direct `NOTION_DATA_SOURCE_ID`; resolves the
+  database's data source with `databases.retrieve`.
+- Paginates the data source query in pages of 100.
+- Returns `Cache-Control: public, max-age=300, s-maxage=300,
+  stale-while-revalidate=600` so the CDN handles repeat visits.
+- Errors are logged server-side and returned as a small JSON message
+  (`not_configured` or `notion_error`) with `Cache-Control: no-store`.
+
+**Local development**
+
+Vite cannot run Netlify Functions by itself. `vite.config.ts` includes a
+`books-dev-api` plugin that loads `.env` with Vite's `loadEnv` and calls the
+same exported `fetchBooks` helper as the function. This keeps `npm run dev`
+working without installing the Netlify CLI. Production uses
+`netlify/functions/books.mjs` through `netlify.toml`.
 
 ## 6. Design System & Animation
 
@@ -178,13 +260,30 @@ disables animations and shows all content immediately, and
 
 ## 8. Performance
 
-- Only one runtime dependency beyond React (the zero-dependency drawably);
-  production JS ≈ 83 KB gzipped.
-- Single page, no routing; filtering runs in memory via `useMemo`.
-- Animations are GPU-friendly (`opacity` / `transform`); the word reveal is
-  `requestAnimationFrame`-throttled.
-- The contact figure is a separate static page, lazy-loaded in a sandboxed frame,
-  so it costs nothing until the section is scrolled into view.
+- The 480px AVIF previews are about 25 KB and 37 KB; 960px versions
+  are about 74 KB and 130 KB. The 480px WebP fallbacks are about 46 KB and 44
+  KB; 960px versions are about 130 KB and 154 KB, compared with 1.39 MiB and
+  1.89 MiB PNG originals. Previews are lazy-loaded, and full-resolution
+  originals are only requested when opened.
+- Typography uses system fonts, avoiding an external font stylesheet and font
+  downloads on the critical path.
+- Unused selectors and animation rules from removed UI have been removed from
+  the stylesheets. Filtering remains in-memory and memoized with `useMemo`.
+- Production bundle sizes (`npm run build`, Vite 8.3.1):
+
+  | Asset | Before | After |
+  | ----- | ------ | ----- |
+  | JavaScript | 285.63 KB / 89.95 KB gzipped | 286.10 KB / 89.77 KB gzipped |
+  | CSS | 28.08 KB / 6.68 KB gzipped | 27.76 KB / 6.63 KB gzipped |
+  | HTML | 1.75 KB / 0.82 KB gzipped | 1.48 KB / 0.72 KB gzipped |
+
+- No route-level code splitting is used: this is a small single-page application,
+  so splitting would add loading states without meaningfully reducing the initial
+  payload.
+- Animations primarily use `opacity` and `transform`; reduced-motion settings
+  disable them. The word reveal updates opacity through `requestAnimationFrame`.
+- Lighthouse has not yet been run; these bundle measurements are build output,
+  not a substitute for a device-based performance audit.
 
 ## 10. Running Locally
 
@@ -197,4 +296,3 @@ npm run lint     # ESLint
 ```
 
 Requires Node.js 20.19+ or 22.12+ (the Vite 8 requirement).
-
